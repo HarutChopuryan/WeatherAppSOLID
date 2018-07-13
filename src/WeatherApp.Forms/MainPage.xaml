@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WeatherApp.Forms.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:WeatherApp">
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="0">
+                <Entry x:Name="entry" WidthRequest="270" />
+                <Button
+                    x:Name="button"
+                    Command="{Binding LoadCommand}"
+                    CommandParameter="{Binding Source={x:Reference entry}, Path=Text}"
+                    Image="search.png" />
+            </StackLayout>
+            <ListView
+                x:Name="listView"
+                GroupDisplayBinding="{Binding Key}"
+                IsGroupingEnabled="True"
+                ItemsSource="{Binding Items}"
+                RowHeight="140"
+                SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Margin="3,3,3,3" BorderColor="Black">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="3*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="Medium"
+                                            Text="{Binding DateTimeText}"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                    <StackLayout
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="Medium"
+                                                Text="{Binding MainItems.Temp}"
+                                                VerticalOptions="Start" />
+                                            <Label
+                                                FontSize="Medium"
+                                                Text="&#8451;"
+                                                VerticalOptions="Start" />
+                                        </StackLayout>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="Default"
+                                            HeightRequest="60"
+                                            Text="{Binding WeatherItems[0].Description}"
+                                            VerticalOptions="Start" />
+                                    </StackLayout>
+                                    <StackLayout
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="Medium"
+                                            Text="{Binding Wind.Speed}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            FontSize="Medium"
+                                            Text="m/s"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
