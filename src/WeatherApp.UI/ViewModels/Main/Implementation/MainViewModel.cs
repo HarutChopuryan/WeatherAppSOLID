@@ -6,6 +6,7 @@ using PropertyChanged;
 using WeatherApp.Core.Models;
 using WeatherApp.Core.Services;
 using WeatherApp.UI.ViewModels.Base.Implementation;
+using Xamarin.Forms;
 
 namespace WeatherApp.UI.ViewModels.Main.Implementation
 {
@@ -20,5 +21,9 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         public ICommand LoadCommand { get; }
         public Weather Weather { get; internal set; }
         public List<Grouping<ListItem>> Items { get; set; }
+        public bool ActivityIndicatorVisibility { get; set; }
+        public string ErrorMessage { get; set; }
+        public bool ErrorVisibility { get; set; }
+        public INavigationService Navigation { get; set; }
     }
 }

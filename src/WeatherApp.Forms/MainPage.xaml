@@ -3,21 +3,28 @@
     x:Class="WeatherApp.Forms.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Weather"
     xmlns:local="clr-namespace:WeatherApp">
 
     <ContentPage.Content>
         <StackLayout>
             <StackLayout Orientation="Horizontal" Spacing="0">
-                <Entry x:Name="entry" WidthRequest="270" />
+                <Entry x:Name="entry" WidthRequest="270"/>
                 <Button
                     x:Name="button"
                     Command="{Binding LoadCommand}"
                     CommandParameter="{Binding Source={x:Reference entry}, Path=Text}"
                     Image="search.png" />
             </StackLayout>
+            <ActivityIndicator 
+                IsRunning="{Binding ActivityIndicatorVisibility}" 
+                IsVisible="{Binding ActivityIndicatorVisibility}"
+                Color="DarkGray"/>
+            <Label
+                IsVisible="{Binding ErrorVisibility}"
+                Text="{Binding ErrorMessage}"/>
             <ListView
                 x:Name="listView"
-                GroupDisplayBinding="{Binding Key}"
                 IsGroupingEnabled="True"
                 ItemsSource="{Binding Items}"
                 RowHeight="140"
@@ -25,7 +32,9 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Margin="3,3,3,3" BorderColor="Black">
+                            <Frame 
+                                Margin="10,5,10,5"
+                                HasShadow="True">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -87,6 +96,21 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label
+                                BackgroundColor="DarkGray"
+                                FontAttributes="Bold,Italic"
+                                FontSize="50"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Key}"
+                                TextColor="WhiteSmoke"
+                                VerticalTextAlignment="Center" 
+                                />
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
             </ListView>
         </StackLayout>
     </ContentPage.Content>

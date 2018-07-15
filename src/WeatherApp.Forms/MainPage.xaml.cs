@@ -18,7 +18,7 @@ namespace WeatherApp.Forms
 	    //protected override void OnAppearing()
 	    //{
      //       base.OnAppearing();
-     //       _viewModel.LoadCommand.Execute(entry.Text);
+	    //    entry.Focus();
 	    //}
 	}
 }
