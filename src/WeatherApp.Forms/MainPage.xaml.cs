@@ -15,10 +15,10 @@ namespace WeatherApp.Forms
 		    BindingContext = _viewModel;
 		}
 
-	    //protected override void OnAppearing()
-	    //{
-     //       base.OnAppearing();
-	    //    entry.Focus();
-	    //}
-	}
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _entry.Focus();
+        }
+    }
 }

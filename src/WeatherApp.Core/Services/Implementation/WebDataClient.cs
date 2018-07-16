@@ -26,9 +26,10 @@ namespace WeatherApp.Core.Services.Implementation
             var uriBuilder = new UriBuilder(ApiBaseUrl);
             uriBuilder.Path += path;
             uriBuilder.Query = GetQueryString(parameters);
-            var result = await _client.GetAsync(uriBuilder.Uri, token);
-            if (!result.IsSuccessStatusCode)
-                throw new Exception($"Http GET request to path {path} failed with status code {result.StatusCode}.");
+            HttpResponseMessage result = null;
+            result = await _client.GetAsync(uriBuilder.Uri, token);
+            //if (!result.IsSuccessStatusCode)
+            //    throw new Exception($"Http GET request to path {path} failed with status code {result.StatusCode}.");
             var response = await ParseResponse<T>(result);
             return response;
         }

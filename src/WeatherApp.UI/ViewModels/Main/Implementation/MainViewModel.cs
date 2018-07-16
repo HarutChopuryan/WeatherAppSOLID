@@ -20,10 +20,10 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         public string City { get; set; }
         public ICommand LoadCommand { get; }
         public Weather Weather { get; internal set; }
-        public List<Grouping<ListItem>> Items { get; set; }
+        public IList<Grouping<ListItem>> Items { get; set; }
         public bool ActivityIndicatorVisibility { get; set; }
         public string ErrorMessage { get; set; }
         public bool ErrorVisibility { get; set; }
-        public INavigationService Navigation { get; set; }
+        public string SearchQuery { get; set; }
     }
 }
