@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization.Formatters.Binary;
+﻿using System;
+using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.UI.ViewModels.Main;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,14 +12,20 @@ namespace WeatherApp.Forms
 		public MainPage(IMainViewModel viewModel)
 		{
 		    _viewModel = viewModel;
-			InitializeComponent();
+		    InitializeComponent();
 		    BindingContext = _viewModel;
 		}
 
-        protected override void OnAppearing()
+	    void OnItemTapped(object sender, SelectedItemChangedEventArgs e)
+	    {
+            listView.ScrollTo(listView.SelectedItem, ScrollToPosition.Center, true);
+	        listView.SelectedItem = null;
+	    }
+
+	    protected override void OnAppearing()
         {
             base.OnAppearing();
-            _entry.Focus();
+            Device.BeginInvokeOnMainThread(() => _entry.Focus());
         }
     }
 }

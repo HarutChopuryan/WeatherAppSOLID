@@ -42,6 +42,7 @@
             Grid.ColumnSpan="2"
             HasUnevenRows="True"
             IsGroupingEnabled="True"
+            ItemSelected="OnItemTapped"
             ItemsSource="{Binding Items}"
             SeparatorVisibility="None">
             <ListView.ItemTemplate>
@@ -136,6 +137,16 @@
             IsVisible="{Binding ActivityIndicatorVisibility}"
             VerticalOptions="Center"
             Color="DarkGray" />
+        <BoxView
+            x:Name="boxView"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BackgroundColor="DarkGray"
+            HeightRequest="132"
+            IsVisible="{Binding FrameVisibility}"
+            Opacity="0.25"
+            VerticalOptions="Center" />
         <Label
             Grid.Row="1"
             Grid.Column="0"
@@ -144,6 +155,6 @@
             IsVisible="{Binding ErrorVisibility}"
             Text="{Binding ErrorMessage}"
             VerticalTextAlignment="Center" />
-    </Grid>
 
+    </Grid>
 </ContentPage>

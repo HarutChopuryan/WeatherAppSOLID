@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using WeatherApp.Core.Models;
+using WeatherApp.UI.ViewModels.Main.Implementation;
 
 namespace WeatherApp.UI.ViewModels.Base.Implementation
 {
@@ -21,7 +23,7 @@ namespace WeatherApp.UI.ViewModels.Base.Implementation
             return _canExecute;
         }
 
-        public abstract void Execute(object parameter);
+        public abstract void Execute(object parameter = null);
 
         protected void SetCanExecute(bool canExecute)
         {

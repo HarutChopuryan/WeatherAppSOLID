@@ -19,6 +19,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             _viewModel = viewModel;
             _weatherService = weatherService;
             _viewModel.Items = new ObservableCollection<Grouping<ListItem>>();
+            //_viewModel.GItems = new ObservableCollection<ParentList>();
         }
 
         public override async void Execute(object parameter)
@@ -29,6 +30,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             var cityName = (string) parameter;
             if (string.IsNullOrWhiteSpace(cityName))
             {
+                _viewModel.FrameVisibility = false;
                 _viewModel.ErrorVisibility = true;
                 SetToNullItemsContent();
                 _viewModel.ErrorMessage = "Type city name";
@@ -54,9 +56,11 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                             return listItem;
                         })))
                         .ToList();
+                    _viewModel.FrameVisibility = true;
                 }
                 else
                 {
+                    _viewModel.FrameVisibility = false;
                     _viewModel.ActivityIndicatorVisibility = true;
                     _viewModel.ErrorVisibility = true;
                     SetToNullItemsContent();
@@ -66,6 +70,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             }
             catch (HttpRequestException)
             {
+                _viewModel.FrameVisibility = false;
                 _viewModel.ActivityIndicatorVisibility = true;
                 _viewModel.ErrorVisibility = true;
                 SetToNullItemsContent();
@@ -73,6 +78,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             }
             catch (NullReferenceException)
             {
+                _viewModel.FrameVisibility = false;
                 _viewModel.ActivityIndicatorVisibility = true;
                 _viewModel.ErrorVisibility = true;
                 SetToNullItemsContent();
