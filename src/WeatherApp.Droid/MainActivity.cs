@@ -32,6 +32,7 @@ namespace WeatherApp.Droid
             
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(null);
             LoadApplication(new App(_container));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

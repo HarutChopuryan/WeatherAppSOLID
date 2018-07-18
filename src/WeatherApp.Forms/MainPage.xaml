@@ -4,7 +4,8 @@
     x:Class="WeatherApp.Forms.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:WeatherApp"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:implementation="clr-namespace:WeatherApp.UI.ViewModels.Main.Implementation;assembly=WeatherApp.UI"
     Title="Weather">
 
     <Grid Padding="10,5,10,5" ColumnSpacing="5">
@@ -47,7 +48,7 @@
             SeparatorVisibility="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell Height="130">
+                    <ViewCell Height="130" BindingContext="ItemsViewModel">
                         <Frame
                             Margin="0,5,0,5"
                             CornerRadius="5"
@@ -59,6 +60,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="3*" />
                                 </Grid.ColumnDefinitions>
                                 <StackLayout
@@ -72,15 +74,25 @@
                                         Text="{Binding DateTimeText}"
                                         VerticalOptions="Center" />
                                 </StackLayout>
+                                <ffimageloading:CachedImage
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    DownsampleHeight="40"
+                                    DownsampleToViewSize="true"
+                                    DownsampleWidth="40"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding IconUrl}"
+                                    VerticalOptions="Center" />
                                 <StackLayout
                                     Grid.Row="0"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Orientation="Horizontal">
                                     <StackLayout Orientation="Horizontal">
                                         <Label
                                             FontAttributes="Bold"
                                             FontSize="Medium"
-                                            Text="{Binding MainItems.Temp, StringFormat='{0:F2}'}"
+                                            Text="{Binding Temp, StringFormat='{0:0.0}'}"
                                             VerticalOptions="Start" />
                                         <Label
                                             FontSize="Medium"
@@ -91,17 +103,17 @@
                                         FontAttributes="Bold"
                                         FontSize="Default"
                                         HeightRequest="60"
-                                        Text="{Binding WeatherItems[0].Description}"
+                                        Text="{Binding Description}"
                                         VerticalOptions="Start" />
                                 </StackLayout>
                                 <StackLayout
                                     Grid.Row="1"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Orientation="Horizontal">
                                     <Label
                                         FontAttributes="Bold"
                                         FontSize="Medium"
-                                        Text="{Binding Wind.Speed}"
+                                        Text="{Binding WindSpeed}"
                                         VerticalOptions="Center" />
                                     <Label
                                         FontSize="Medium"
