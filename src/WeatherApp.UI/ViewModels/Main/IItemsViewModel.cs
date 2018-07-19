@@ -7,7 +7,7 @@ using WeatherApp.UI.ViewModels.Main.Implementation;
 
 namespace WeatherApp.UI.ViewModels.Main
 {
-    public interface IItemsViewModel 
+    public interface IItemsViewModel
     {
         string DateTimeText { get; set; }
 

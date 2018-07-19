@@ -19,8 +19,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         {
             _mainViewModel = mainViewModel;
             _weatherService = weatherService;
-            _mainViewModel.Items = new ObservableCollection<ItemsViewModel>();
-            //_mainViewModel.GItems = new ObservableCollection<ParentList>();
+            _mainViewModel.Items = new ObservableCollection<Grouping<ItemsViewModel>>();
         }
 
         public override async void Execute(object parameter)
@@ -47,30 +46,12 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                 if (currentState == NetworkAccess.Internet)
                 {
                     _mainViewModel.Weather = await _weatherService.GetWeatherAsync(cityName);
-                    foreach (var item in _mainViewModel.Weather.ListItems)
-                        _mainViewModel.ListItemViewModel.Temp.Add(item.MainItems.Temp - 273.15);
-
-                    foreach (var path in _mainViewModel.Weather.ListItems)
-                        _mainViewModel.ListItemViewModel.IconUrl.Add(BaseImgUri + path.WeatherItems[0].Icon + ".png");
 
                     _mainViewModel.Items = _mainViewModel.Weather.ListItems
                         .GroupBy(item => DateTime.Parse(item.DateTimeText).ToString("yyyy-MM-dd"))
-                        .Select(grouping => new Grouping<ListItem>(grouping.Key, grouping.Select(listItem =>
-                        {
-                            listItem.DateTimeText = listItem.DateTimeText.Substring(10);
-                            return listItem;
-                        })))
+                        .Select(grouping => new Grouping<ItemsViewModel>(grouping.Key, grouping.Select(MapListItemToItemsViewModel)))
                         .ToList();
 
-                    foreach (var item in _mainViewModel.Items)
-                    {
-                        _mainViewModel.ListItemViewModel.DateTimeText.Add(item.Key);
-                        foreach (var description in item)
-                        {
-                            _mainViewModel.ListItemViewModel.Description.Add(description.WeatherItems[0].Description);
-                            _mainViewModel.ListItemViewModel.WindSpeed.Add(description.Wind.Speed);
-                        }
-                    }
                     _mainViewModel.FrameVisibility = true;
                 }
                 else
@@ -105,6 +86,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             }
         }
 
+
         private string MakeUpperFirstLetter(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -116,6 +98,17 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         {
             if (_mainViewModel.Items != null && _mainViewModel.Items.Count > 0)
                 _mainViewModel.Items = null;
+        }
+
+        private ItemsViewModel MapListItemToItemsViewModel(ListItem listItem)
+        {
+            return new ItemsViewModel
+            {
+                DateTimeText = listItem.DateTimeText.Substring(10),
+                Temp = listItem.MainItems.Temp - 273.15,
+                Description = listItem.WeatherItems[0].Description,
+                IconUrl = BaseImgUri + listItem.WeatherItems[0].Icon + ".png"
+            };
         }
     }
 }

@@ -26,6 +26,6 @@ namespace WeatherApp.UI.ViewModels.Main
 
         Weather Weather { get; set; }
 
-        IList<ItemsViewModel> Items { get; set; }
+        IList<Grouping<ItemsViewModel>> Items { get; set; }
     }
 }
