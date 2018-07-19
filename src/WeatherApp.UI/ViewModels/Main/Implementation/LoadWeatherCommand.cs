@@ -107,7 +107,8 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                 DateTimeText = listItem.DateTimeText.Substring(10),
                 Temp = listItem.MainItems.Temp - 273.15,
                 Description = listItem.WeatherItems[0].Description,
-                IconUrl = BaseImgUri + listItem.WeatherItems[0].Icon + ".png"
+                IconUrl = BaseImgUri + listItem.WeatherItems[0].Icon + ".png",
+                WindSpeed = listItem.Wind.Speed
             };
         }
     }

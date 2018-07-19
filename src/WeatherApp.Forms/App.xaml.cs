@@ -14,7 +14,11 @@ namespace WeatherApp.Forms
 		{
 		    _container = container;
 			InitializeComponent();
-		    MainPage = new NavigationPage(_container.Locate<MainPage>());
+            
+		    MainPage = new NavigationPage(_container.Locate<MainPage>())
+		    {
+                BarBackgroundColor = Color.Transparent
+		    };
 		}
 
 	    protected override void OnStart ()
