@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using Grace.DependencyInjection.Exceptions;
 using WeatherApp.Core.Models;
 using WeatherApp.Core.Services;
 using WeatherApp.UI.ViewModels.Base.Implementation;
@@ -47,6 +49,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                 {
                     _mainViewModel.Weather = await _weatherService.GetWeatherAsync(cityName);
 
+
                     _mainViewModel.Items = _mainViewModel.Weather.ListItems
                         .GroupBy(item => DateTime.Parse(item.DateTimeText).ToString("yyyy-MM-dd"))
                         .Select(grouping => new Grouping<ItemsViewModel>(grouping.Key, grouping.Select(MapListItemToItemsViewModel)))
@@ -73,6 +76,14 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                 _mainViewModel.ErrorMessage = "No internet access";
             }
             catch (NullReferenceException)
+            {
+                _mainViewModel.FrameVisibility = false;
+                _mainViewModel.ActivityIndicatorVisibility = true;
+                _mainViewModel.ErrorVisibility = true;
+                SetToNullItemsContent();
+                _mainViewModel.ErrorMessage = "City not found";
+            }
+            catch (Exception)
             {
                 _mainViewModel.FrameVisibility = false;
                 _mainViewModel.ActivityIndicatorVisibility = true;
