@@ -24,6 +24,5 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         public bool ActivityIndicatorVisibility { get; set; }
         public string ErrorMessage { get; set; }
         public bool ErrorVisibility { get; set; }
-        public INavigationService Navigation { get; set; }
     }
 }
