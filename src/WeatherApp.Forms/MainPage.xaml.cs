@@ -24,43 +24,67 @@ namespace WeatherApp.Forms
 
 	    void OnItemTapped(object sender, ItemTappedEventArgs itemTappedEventArgs)
 	    {
-	        //double selectionX = 0;
-	        //double selectionY = 0;
-         //   int count = 0;
-	        //int selectedItemIndex = -1;
-	        //int selectedItemOldIndex = -1;
-         //   var selectedItem = (listView.ItemsSource as List<Grouping<ItemsViewModel>>).Select(item=> new SelectedItemGroup()
-         //   {
-         //       Key = item.Key,
-         //       Index = item.IndexOf(listView.SelectedItem),
-         //       Count = item.Count
-         //   });
-	        //foreach (var item in selectedItem)
-	        //{
-	        //    count = item.Count;
-	        //    selectedItemOldIndex = item.Index;
-         //       break;
-	        //}
-	        //foreach (var item in selectedItem)
-	        //{
-	        //    if (item.Key == DateTime.Today.ToString("yyyy-MM-dd") && item.Index != -1)
-	        //        selectedItemIndex = item.Index;
-	        //}
+            int topCount = 0;
+	        int bottomCount = 0;
+            int selectedTopItemIndex = -1;
+	        int selectedBottomItemIndex = -1;
+            var selectedItem = (listView.ItemsSource as List<Grouping<ItemsViewModel>>).Select(item => new SelectedItemGroup()
+            {
+                Key = item.Key,
+                Index = item.IndexOf(listView.SelectedItem),
+                Count = item.Count
+            });
+            foreach (var item in selectedItem)
+            {
+                topCount = item.Count;
+                break;
+            }
+	        DateTime after5Days = DateTime.Today.AddDays(5);
+            foreach (var item in selectedItem)
+            {
+                if (item.Key == DateTime.Now.ToString("yyyy-MM-dd") && item.Index != -1)
+                    selectedTopItemIndex = item.Index;
+                if (item.Key == after5Days.ToString("yyyy-MM-dd") && item.Index != -1)
+                {
+                    selectedBottomItemIndex = item.Index;
+                    bottomCount = item.Count;
+                }
+            }
 
-	        //for (int i = 0; i < count; i++)
-	        //{
-	        //    if (selectedItemIndex == i)
-	        //    {
-	        //        if (selectedItemIndex < selectedItemOldIndex)
-	        //            selection.TranslateTo(0, +60 * (count - i), 500);
-	        //        else if(selectedItemIndex==count-1)
-	        //            selection.TranslateTo(0, -47 * (count - i), 500);
-	        //        else
-	        //            selection.TranslateTo(0, -60 * (count - i), 500);
-         //       }
-	        //}
-            listView.ScrollTo(listView.SelectedItem, ScrollToPosition.Center, true);
+	        for (int i = 0; i < topCount; i++)
+	        {
+	            if (selectedTopItemIndex == i)
+	            {
+	                _viewModel.TopSpaceVisibility = true;
+                    topSpace.HeightRequest = (topCount / 2 == 0)
+                        ? 70 * ((topCount / 2) + 1 - selectedTopItemIndex)
+                        : 70 * ((topCount / 2) + 2 - selectedTopItemIndex);
+                    listView.SelectedItem = null;
+                    return;
+                }
+	        }
+            for (int i = bottomCount; i > 0; i--)
+            {
+                if (selectedBottomItemIndex >= (bottomCount / 2) && selectedBottomItemIndex == i)
+                {
+                    _viewModel.BottomSpaceVisibility = true;
+                    //double bottomMargin = (bottomCount / 2 == 0)
+                    //    ? 70 * ((bottomCount / 2) + 1 - selectedBottomItemIndex)
+                    //    : 70 * ((bottomCount / 2) + 2 - selectedBottomItemIndex);
+                    bottomSpace.HeightRequest = (bottomCount / 2 == 0)
+                        ? 70 * ((bottomCount / 2) + 1 - selectedBottomItemIndex)
+                        : 70 * ((bottomCount / 2) + 2 - selectedBottomItemIndex);
+                    //bottomSpace.Margin = new Thickness(0, 0, 0, bottomMargin);
+                    //listView.ScrollTo(listView.SelectedItem, ScrollToPosition.Center, true);
+                    //listViewStackLayout.Margin = new Thickness(0, 0, 0, bottomMargin);
+                    listView.SelectedItem = null;
+                    return;
+                }
+            }
+            _viewModel.TopSpaceVisibility = false;
+	        _viewModel.BottomSpaceVisibility = false;
+	        listView.ScrollTo(listView.SelectedItem, ScrollToPosition.Center, true);
 	        listView.SelectedItem = null;
-	    }
+        }
 	}
 }

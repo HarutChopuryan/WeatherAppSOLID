@@ -26,5 +26,9 @@ namespace WeatherApp.UI.ViewModels.Main
         Weather Weather { get; set; }
 
         IList<Grouping<ItemsViewModel>> Items { get; set; }
+
+        bool TopSpaceVisibility { get; set; }
+
+        bool BottomSpaceVisibility { get; set; }
     }
 }
