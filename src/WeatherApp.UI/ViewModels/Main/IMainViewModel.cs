@@ -19,6 +19,7 @@ namespace WeatherApp.UI.ViewModels.Main
         string ErrorMessage { get; set; }
 
         bool ErrorVisibility { get; set; }
+
         string SearchQuery { get; set; }
 
         bool FrameVisibility { get; set; }

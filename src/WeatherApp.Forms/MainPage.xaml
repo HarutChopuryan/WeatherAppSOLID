@@ -5,6 +5,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:forms="clr-namespace:WeatherApp.Forms;assembly=WeatherApp.Forms"
     Title="Weather"
     BackgroundImage="BackgroundImage.jpg">
 
@@ -41,9 +42,9 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2">
-            <BoxView x:Name="topSpace" IsVisible="{Binding TopSpaceVisibility}"/>
-            <ListView
-                x:Name="listView"
+            <BoxView x:Name="topSpace" IsVisible="{Binding TopSpaceVisibility}" />
+            <forms:MyListView
+                x:Name="WeatherlistView"
                 HasUnevenRows="True"
                 IsGroupingEnabled="True"
                 ItemTapped="OnItemTapped"
@@ -63,72 +64,72 @@
                                     <ColumnDefinition Width="3*" />
                                 </Grid.ColumnDefinitions>
                                 <StackLayout
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="0"
-                                Orientation="Horizontal">
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Orientation="Horizontal">
                                     <Label
-                                    FontAttributes="Bold"
-                                    FontSize="15"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding DateTimeText}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalTextAlignment="Center" />
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding DateTimeText}"
+                                        TextColor="WhiteSmoke"
+                                        VerticalTextAlignment="Center" />
                                 </StackLayout>
                                 <ffimageloading:CachedImage
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="1"
-                                Aspect="AspectFit"
-                                HeightRequest="50"
-                                HorizontalOptions="Center"
-                                Source="{Binding IconUrl}"
-                                VerticalOptions="Center"
-                                WidthRequest="50" />
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Aspect="AspectFit"
+                                    HeightRequest="50"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding IconUrl}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="50" />
                                 <StackLayout
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Orientation="Horizontal">
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal">
                                     <StackLayout Orientation="Horizontal">
                                         <Label
+                                            FontAttributes="Bold"
+                                            FontSize="13"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Temp, StringFormat='{0:0.0}'}"
+                                            TextColor="WhiteSmoke"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            FontSize="13"
+                                            HorizontalOptions="Center"
+                                            Text="&#8451;"
+                                            TextColor="WhiteSmoke"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                    <Label
                                         FontAttributes="Bold"
                                         FontSize="13"
                                         HorizontalOptions="Center"
-                                        Text="{Binding Temp, StringFormat='{0:0.0}'}"
+                                        Text="{Binding Description}"
                                         TextColor="WhiteSmoke"
                                         VerticalOptions="Center" />
-                                        <Label
-                                        FontSize="13"
-                                        HorizontalOptions="Center"
-                                        Text="&#8451;"
-                                        TextColor="WhiteSmoke"
-                                        VerticalOptions="Center" />
-                                    </StackLayout>
-                                    <Label
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Description}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
                                 </StackLayout>
                                 <StackLayout
-                                Grid.Row="1"
-                                Grid.Column="2"
-                                Orientation="Horizontal">
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Orientation="Horizontal">
                                     <Label
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding WindSpeed}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
+                                        FontAttributes="Bold"
+                                        FontSize="13"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding WindSpeed}"
+                                        TextColor="WhiteSmoke"
+                                        VerticalOptions="Center" />
                                     <Label
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="m/s"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
+                                        FontSize="13"
+                                        HorizontalOptions="Center"
+                                        Text="m/s"
+                                        TextColor="WhiteSmoke"
+                                        VerticalOptions="Center" />
                                 </StackLayout>
                             </Grid>
                         </ViewCell>
@@ -138,17 +139,17 @@
                     <DataTemplate>
                         <ViewCell Height="50">
                             <Label
-                            FontAttributes="Bold,Italic"
-                            FontSize="30"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding Key}"
-                            TextColor="WhiteSmoke"
-                            VerticalTextAlignment="Center" />
+                                FontAttributes="Bold,Italic"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Key}"
+                                TextColor="WhiteSmoke"
+                                VerticalTextAlignment="Center" />
                         </ViewCell>
                     </DataTemplate>
                 </ListView.GroupHeaderTemplate>
-            </ListView>
-            <BoxView x:Name="bottomSpace" IsVisible="{Binding BottomSpaceVisibility}"/>
+            </forms:MyListView>
+            <BoxView x:Name="bottomSpace" IsVisible="{Binding BottomSpaceVisibility}" />
         </StackLayout>
         <ActivityIndicator
             Grid.Row="1"

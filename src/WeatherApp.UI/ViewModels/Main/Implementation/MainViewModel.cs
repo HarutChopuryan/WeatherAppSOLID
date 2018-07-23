@@ -11,7 +11,7 @@ using Xamarin.Forms;
 namespace WeatherApp.UI.ViewModels.Main.Implementation
 {
     [AddINotifyPropertyChangedInterface]
-    internal class MainViewModel : BaseBindableObject, IMainViewModel
+    public class MainViewModel : BaseBindableObject, IMainViewModel
     {
         public MainViewModel(IWeatherService weatherService)
         {
