@@ -12,7 +12,6 @@ namespace WeatherApp.Droid
 {
     public class ListViewExRenderer : ListViewRenderer, AbsListView.IOnScrollListener
     {
-        private int lastFirstVisibleItem = 0;
         public ListViewExRenderer(Context context) : base(context)
         {
         }
@@ -23,39 +22,22 @@ namespace WeatherApp.Droid
 
         public void OnScrollStateChanged(AbsListView view, ScrollState scrollState)
         {
-            bool isScrollingUp = false;
-            int currentFirstVisibleItem = view.FirstVisiblePosition;
-            if (currentFirstVisibleItem > lastFirstVisibleItem)
+            if (Element != null)
             {
-                isScrollingUp = false;
-            }
-            else if (currentFirstVisibleItem < lastFirstVisibleItem)
-            {
-                isScrollingUp = true;
-            }
-            lastFirstVisibleItem = currentFirstVisibleItem;
-            if(isScrollingUp)
-            {
-                if (scrollState == ScrollState.Idle)
+                var element = (MyListView)Element;
+                if (view.CanScrollVertically(-1))
+                    element.ShrinkFooter();
+                if (view.CanScrollVertically(1))
+                    element.ShrinkHeader();
+                if (!view.CanScrollVertically(-1))
                 {
-                    if (Element != null)
-                    {
-                        var element = (MyListView)Element;
-                        element.ExpandHeader();
-                        element.ShrinkFooter();
-                    }
+                    element.ShrinkFooter();
+                    element.ExpandHeader();
                 }
-            }
-            else
-            {
-                if (scrollState == ScrollState.Idle)
+                if (!view.CanScrollVertically(1))
                 {
-                    if (Element != null)
-                    {
-                        var element = (MyListView)Element;
-                        element.ShrinkHeader();
-                        element.ExpandFooter();
-                    }
+                    element.ShrinkHeader();
+                    element.ExpandFooter();
                 }
             }
         }
@@ -66,11 +48,6 @@ namespace WeatherApp.Droid
             if (Element == null || Control == null)
                 return;
             Control.SetOnScrollListener(this);
-            Control.ScrollChange += Control_ScrollChange;
-        }
-
-        private void Control_ScrollChange(object sender, ScrollChangeEventArgs e)
-        {
         }
     }
 }

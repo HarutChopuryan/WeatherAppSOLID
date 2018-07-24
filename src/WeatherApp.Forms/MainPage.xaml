@@ -42,7 +42,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2">
-            <BoxView x:Name="topSpace" IsVisible="{Binding TopSpaceVisibility}" />
+            <BoxView x:Name="topSpace" IsVisible="False" />
             <forms:MyListView
                 x:Name="WeatherlistView"
                 HasUnevenRows="True"
