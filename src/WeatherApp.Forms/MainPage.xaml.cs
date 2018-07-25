@@ -24,6 +24,20 @@ namespace WeatherApp.Forms
             WeatherlistView.OnExpandFooter += WeatherlistView_OnExpandFooter;
             WeatherlistView.OnShrinkHeader += WeatherlistView_OnShrinkHeader;
             WeatherlistView.OnShrinkFooter += WeatherlistView_OnShrinkFooter;
+            WeatherlistView.OnSelectionRepositioning += WeatherlistView_OnSelectionRepositioning;
+        }
+
+        private void WeatherlistView_OnSelectionRepositioning(object sender, EventArgs e)
+        {
+            //Debug.WriteLine(WeatherlistView.ScrollY);
+            
+            double selectionCenter = (selection.Y + selection.Y + bottomOfSelection.Y) / 2;
+            //double prevItemCenter = selectionCenter - (selection.Height / 2) - WeatherlistView.RowHeight / 2;
+            //double nextItemCenter = selectionCenter + (selection.Height / 2) + WeatherlistView.RowHeight / 2;
+            //if (selectionCenter - prevItemCenter < nextItemCenter - selectionCenter)
+            //    WeatherlistView.ScrollTo(prevItemCenter, ScrollToPosition.MakeVisible, true);
+            //else
+            //    WeatherlistView.ScrollTo(nextItemCenter, ScrollToPosition.MakeVisible, true);
         }
 
         private void WeatherlistView_OnShrinkFooter(object sender, EventArgs e)
@@ -42,7 +56,7 @@ namespace WeatherApp.Forms
             bottomSpace.HeightRequest = WeatherlistView.Height / 2 - 70;
         }
 
-        async private void WeatherlistView_OnExpandHeader(object sender, EventArgs e)
+        private void WeatherlistView_OnExpandHeader(object sender, EventArgs e)
         {
             topSpace.IsVisible = true;
             topSpace.HeightRequest = WeatherlistView.Height / 2 - 70;
