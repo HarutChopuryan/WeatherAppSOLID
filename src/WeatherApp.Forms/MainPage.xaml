@@ -9,7 +9,7 @@
     Title="Weather"
     BackgroundImage="BackgroundImage.jpg">
 
-    <Grid ColumnSpacing="5">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -42,7 +42,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,0,0,15"
+            Margin="0,0,0,0"
             IsGroupingEnabled="True"
             ItemTapped="OnItemTapped"
             ItemsSource="{Binding Items}"
@@ -167,7 +167,8 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,36,0,0"
+            Margin="0,45,0,0"
+            IsEnabled="False"
             IsVisible="{Binding FrameVisibility}"
             RowSpacing="0"
             VerticalOptions="Center">
@@ -177,18 +178,19 @@
                 <RowDefinition Height="1" />
             </Grid.RowDefinitions>
             <BoxView
-                x:Name="topOfSelection"
                 Grid.Row="0"
-                BackgroundColor="#8BBFD9" />
+                BackgroundColor="#8BBFD9"
+                IsEnabled="False" />
             <BoxView
                 Grid.Row="1"
                 BackgroundColor="#3386B0"
+                IsEnabled="False"
                 Opacity="0.25"
                 VerticalOptions="FillAndExpand" />
             <BoxView
-                x:Name="bottomOfSelection"
                 Grid.Row="2"
-                BackgroundColor="#8BBFD9" />
+                BackgroundColor="#8BBFD9"
+                IsEnabled="False" />
         </Grid>
         <Label
             Grid.Row="1"

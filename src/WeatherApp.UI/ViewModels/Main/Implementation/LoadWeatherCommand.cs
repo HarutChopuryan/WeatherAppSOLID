@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -56,6 +57,16 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
                         .ToList();
 
                     _mainViewModel.FrameVisibility = true;
+
+                    _mainViewModel.FlattenedItems = new List<object>();
+                    foreach (var group in _mainViewModel.Items)
+                    {
+                        _mainViewModel.FlattenedItems.Add(group);
+                        foreach (var itemsViewModel in group)
+                        {
+                            _mainViewModel.FlattenedItems.Add(itemsViewModel);
+                        }
+                    }
                 }
                 else
                 {
@@ -115,7 +126,7 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         {
             return new ItemsViewModel
             {
-                DateTimeText = listItem.DateTimeText.Substring(10),
+                DateTimeText = listItem.DateTimeText.Substring(10,6),
                 Temp = listItem.MainItems.Temp - 273.15,
                 Description = listItem.WeatherItems[0].Description,
                 IconUrl = BaseImgUri + listItem.WeatherItems[0].Icon + ".png",

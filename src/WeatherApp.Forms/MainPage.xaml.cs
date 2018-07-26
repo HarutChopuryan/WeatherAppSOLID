@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using WeatherApp.UI.ViewModels.Main;
 using WeatherApp.UI.ViewModels.Main.Implementation;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
@@ -29,15 +31,19 @@ namespace WeatherApp.Forms
 
         private void WeatherlistView_OnSelectionRepositioning(object sender, EventArgs e)
         {
-            //Debug.WriteLine(WeatherlistView.ScrollY);
-            
-            double selectionCenter = (selection.Y + selection.Y + bottomOfSelection.Y) / 2;
-            //double prevItemCenter = selectionCenter - (selection.Height / 2) - WeatherlistView.RowHeight / 2;
-            //double nextItemCenter = selectionCenter + (selection.Height / 2) + WeatherlistView.RowHeight / 2;
-            //if (selectionCenter - prevItemCenter < nextItemCenter - selectionCenter)
-            //    WeatherlistView.ScrollTo(prevItemCenter, ScrollToPosition.MakeVisible, true);
-            //else
-            //    WeatherlistView.ScrollTo(nextItemCenter, ScrollToPosition.MakeVisible, true);
+            if (WeatherlistView.FirstVisibleItemAfterScroll != 0)
+            {
+                double scrollY = (WeatherlistView.FirstVisibleItemAfterScroll-1) * WeatherlistView.RowHeight + WeatherlistView.FirstVisibleItemTopYOffsetAfterScroll;
+                var scrollYAtCenter = scrollY + (selection.Y - WeatherlistView.Y);
+                var estimatedItemAtCenter = scrollYAtCenter / WeatherlistView.RowHeight;
+                var itemToCenterIndex = Math.Round(estimatedItemAtCenter);
+                var itemToCenter = _viewModel.FlattenedItems[(int)itemToCenterIndex];
+                if (itemToCenter is Grouping<ItemsViewModel> group)
+                {
+                    itemToCenter = group[0];
+                }
+                WeatherlistView.ScrollTo(itemToCenter, ScrollToPosition.Center, true);
+            }
         }
 
         private void WeatherlistView_OnShrinkFooter(object sender, EventArgs e)
@@ -53,13 +59,13 @@ namespace WeatherApp.Forms
         private void WeatherlistView_OnExpandFooter(object sender, EventArgs e)
         {
             bottomSpace.IsVisible = true;
-            bottomSpace.HeightRequest = WeatherlistView.Height / 2 - 70;
+            bottomSpace.HeightRequest = WeatherlistView.Height / 2 - WeatherlistView.RowHeight;
         }
 
         private void WeatherlistView_OnExpandHeader(object sender, EventArgs e)
         {
             topSpace.IsVisible = true;
-            topSpace.HeightRequest = WeatherlistView.Height / 2 - 70;
+            topSpace.HeightRequest = WeatherlistView.Height / 2 - WeatherlistView.RowHeight;
         }
 
         void OnItemTapped(object sender, ItemTappedEventArgs itemTappedEventArgs)

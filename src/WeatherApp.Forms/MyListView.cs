@@ -5,7 +5,8 @@ namespace WeatherApp.Forms
     public class MyListView : ListView
     {
         public int FirstVisibleItemAfterScroll { get; set; }
-        public int FirstVisibleItemTopYOffsetAfterScroll { get; set; }
+
+        public double FirstVisibleItemTopYOffsetAfterScroll { get; set; }
 
         public event EventHandler OnExpandHeader;
         public event EventHandler OnShrinkHeader;
