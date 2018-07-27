@@ -15,8 +15,8 @@ namespace WeatherApp.UI.ViewModels.Main
 
         string Description { get; set; }
 
-        double Temp { get; set; }
+        string Temp { get; set; }
 
-        double WindSpeed { get; set; }
+        string WindSpeed { get; set; }
     }
 }

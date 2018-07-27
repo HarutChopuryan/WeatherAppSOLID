@@ -14,7 +14,6 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
 {
     internal class LoadWeatherCommand : Command
     {
-        private const string BaseImgUri = "http://openweathermap.org/img/w/";
         private readonly MainViewModel _mainViewModel;
         private readonly IWeatherService _weatherService;
 
@@ -127,10 +126,10 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             return new ItemsViewModel
             {
                 DateTimeText = listItem.DateTimeText.Substring(10,6),
-                Temp = listItem.MainItems.Temp - 273.15,
+                Temp = $"{listItem.MainItems.Temp-273.15:0.0} \u00B0C",
                 Description = listItem.WeatherItems[0].Description,
-                IconUrl = BaseImgUri + listItem.WeatherItems[0].Icon + ".png",
-                WindSpeed = listItem.Wind.Speed
+                IconUrl = listItem.WeatherItems[0].Description.Replace(" ","_") + ".png",
+                WindSpeed = $"{listItem.Wind.Speed:0.0} m/s"
             };
         }
     }

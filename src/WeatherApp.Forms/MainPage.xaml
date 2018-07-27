@@ -6,7 +6,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:forms="clr-namespace:WeatherApp.Forms;assembly=WeatherApp.Forms"
-    Title="Weather"
     BackgroundImage="BackgroundImage.jpg">
 
     <Grid>
@@ -42,96 +41,75 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,0,0,0"
+            Margin="15,0,15,0"
             IsGroupingEnabled="True"
             ItemTapped="OnItemTapped"
             ItemsSource="{Binding Items}"
-            RowHeight="70"
             SeparatorVisibility="None">
             <forms:MyListView.Header>
-                <BoxView x:Name="topSpace" IsVisible="False" />
+                <BoxView
+                    x:Name="topSpace"
+                    HeightRequest="0"
+                    IsVisible="False" />
             </forms:MyListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Margin="15,0,0,0" BackgroundColor="Transparent">
+                        <Grid BackgroundColor="Transparent">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <StackLayout
+                            <Label
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Grid.Column="0"
-                                Orientation="Horizontal">
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="15"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding DateTimeText}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalTextAlignment="Center" />
-                            </StackLayout>
+                                FontSize="20"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding DateTimeText}"
+                                TextColor="White"
+                                VerticalTextAlignment="Center" />
                             <ffimageloading:CachedImage
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Grid.Column="1"
                                 Aspect="AspectFit"
-                                HeightRequest="50"
+                                HeightRequest="32"
                                 HorizontalOptions="Center"
                                 Source="{Binding IconUrl}"
                                 VerticalOptions="Center"
-                                WidthRequest="50" />
-                            <StackLayout
+                                WidthRequest="32" />
+                            <Label
                                 Grid.Row="0"
                                 Grid.Column="2"
-                                Orientation="Horizontal">
-                                <StackLayout Orientation="Horizontal">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="13"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Temp, StringFormat='{0:0.0}'}"
-                                        TextColor="WhiteSmoke"
-                                        VerticalOptions="Center" />
-                                    <Label
-                                        FontSize="13"
-                                        HorizontalOptions="Center"
-                                        Text="&#8451;"
-                                        TextColor="WhiteSmoke"
-                                        VerticalOptions="Center" />
-                                </StackLayout>
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Description}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
-                            </StackLayout>
-                            <StackLayout
+                                FontSize="13"
+                                HorizontalOptions="Start"
+                                Text="{Binding Temp}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="3"
+                                FontSize="15"
+                                HorizontalOptions="Start"
+                                Text="{Binding Description}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Label
                                 Grid.Row="1"
                                 Grid.Column="2"
-                                Orientation="Horizontal">
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding WindSpeed}"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontSize="13"
-                                    HorizontalOptions="Center"
-                                    Text="m/s"
-                                    TextColor="WhiteSmoke"
-                                    VerticalOptions="Center" />
-                            </StackLayout>
+                                FontSize="13"
+                                HorizontalOptions="Start"
+                                Text="{Binding WindSpeed}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
@@ -144,13 +122,16 @@
                             FontSize="30"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Key}"
-                            TextColor="WhiteSmoke"
+                            TextColor="White"
                             VerticalTextAlignment="Center" />
                     </ViewCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
             <forms:MyListView.Footer>
-                <BoxView x:Name="bottomSpace" IsVisible="False" />
+                <BoxView
+                    x:Name="bottomSpace"
+                    HeightRequest="0"
+                    IsVisible="False" />
             </forms:MyListView.Footer>
         </forms:MyListView>
         <ActivityIndicator
@@ -167,14 +148,13 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,45,0,0"
             IsEnabled="False"
             IsVisible="{Binding FrameVisibility}"
             RowSpacing="0"
             VerticalOptions="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1" />
-                <RowDefinition Height="74" />
+                <RowDefinition Height="47" />
                 <RowDefinition Height="1" />
             </Grid.RowDefinitions>
             <BoxView

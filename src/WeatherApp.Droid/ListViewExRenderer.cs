@@ -1,12 +1,12 @@
-﻿using Android.Content;
+﻿using System;
+using Android.Content;
 using Android.Util;
 using Android.Widget;
-using Java.Lang;
 using WeatherApp.Droid;
 using WeatherApp.Forms;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Xamarin.Essentials;
 using ListView = Xamarin.Forms.ListView;
 
 [assembly: ExportRenderer(typeof(MyListView), typeof(ListViewExRenderer))]
@@ -15,16 +15,14 @@ namespace WeatherApp.Droid
 {
     public class ListViewExRenderer : ListViewRenderer, AbsListView.IOnScrollListener
     {
+        private readonly Context _context;
         private int firstVisibleItem = -1;
         private int scrolledCount = 0;
 
         public ListViewExRenderer(Context context) : base(context)
         {
+            _context = context;
             ScrollChange += OnScrollChange;
-        }
-
-        private void OnScrollChange(object sender, ScrollChangeEventArgs e)
-        {
         }
 
         public void OnScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
@@ -35,10 +33,10 @@ namespace WeatherApp.Droid
         {
             if (Element != null)
             {
-                var element = (MyListView)Element;
+                var element = (MyListView) Element;
                 if (firstVisibleItem == -1)
                     firstVisibleItem = view.FirstVisiblePosition;
-                int currentFirstVisibleItem = -1;
+                var currentFirstVisibleItem = -1;
                 if (view.CanScrollVertically(-1))
                     element.ShrinkFooter();
                 if (view.CanScrollVertically(1))
@@ -48,24 +46,30 @@ namespace WeatherApp.Droid
                     element.ShrinkFooter();
                     element.ExpandHeader();
                 }
+
                 if (!view.CanScrollVertically(1))
                 {
                     element.ShrinkHeader();
                     element.ExpandFooter();
                 }
+
                 if (scrollState == ScrollState.Idle)
                 {
                     if (Element != null)
                     {
-                        var metrics = DeviceDisplay.ScreenMetrics;
                         var c = Control.GetChildAt(0);
-                        element.FirstVisibleItemTopYOffsetAfterScroll = -c.Top / metrics.Density;
+                        element.FirstVisibleItemTopYOffsetAfterScroll = ConvertPixelsToDp(Math.Abs(c.Top));
                         element.FirstVisibleItemAfterScroll = Control.FirstVisiblePosition;
+                        element.CellHeight = ConvertPixelsToDp(c.Height + c.PaddingBottom + c.PaddingTop);
                         element.SelectionRepositioning();
                     }
                     firstVisibleItem = currentFirstVisibleItem;
                 }
             }
+        }
+
+        private void OnScrollChange(object sender, ScrollChangeEventArgs e)
+        {
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<ListView> e)
@@ -74,6 +78,23 @@ namespace WeatherApp.Droid
             if (Element == null || Control == null)
                 return;
             Control.SetOnScrollListener(this);
+        }
+
+
+        public float ConvertDpToPixel(float dp)
+        {
+            var resources = _context.Resources;
+            var metrics = resources.DisplayMetrics;
+            var px = dp * ((float) metrics.DensityDpi / (int) DisplayMetricsDensity.Default);
+            return px;
+        }
+
+        public float ConvertPixelsToDp(float px)
+        {
+            var resources = _context.Resources;
+            var metrics = resources.DisplayMetrics;
+            var dp = px / ((float) metrics.DensityDpi / (int) DisplayMetricsDensity.Default);
+            return dp;
         }
     }
 }

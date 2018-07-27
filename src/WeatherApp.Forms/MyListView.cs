@@ -8,6 +8,8 @@ namespace WeatherApp.Forms
 
         public double FirstVisibleItemTopYOffsetAfterScroll { get; set; }
 
+        public double CellHeight { get; set; }
+
         public event EventHandler OnExpandHeader;
         public event EventHandler OnShrinkHeader;
 
