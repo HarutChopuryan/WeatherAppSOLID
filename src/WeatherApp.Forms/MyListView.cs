@@ -10,6 +10,8 @@ namespace WeatherApp.Forms
 
         public double CellHeight { get; set; }
 
+        public double TopSpaceScrollY { get; set; }
+
         public event EventHandler OnExpandHeader;
         public event EventHandler OnShrinkHeader;
 

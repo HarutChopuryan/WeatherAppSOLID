@@ -17,7 +17,6 @@ namespace WeatherApp.Droid
     {
         private readonly Context _context;
         private int firstVisibleItem = -1;
-        private int scrolledCount = 0;
 
         public ListViewExRenderer(Context context) : base(context)
         {
@@ -33,10 +32,21 @@ namespace WeatherApp.Droid
         {
             if (Element != null)
             {
+                var currentFirstVisibleItem = -1;
                 var element = (MyListView) Element;
+                if (scrollState == ScrollState.Idle)
+                {
+                    var c = Control.GetChildAt(0);
+                    if (element.FirstVisibleItemAfterScroll == 0)
+                        element.TopSpaceScrollY = ConvertPixelsToDp(Math.Abs(Control.GetChildAt(1).Top));
+                    element.FirstVisibleItemTopYOffsetAfterScroll = ConvertPixelsToDp(Math.Abs(c.Top));
+                    element.FirstVisibleItemAfterScroll = Control.FirstVisiblePosition;
+                    element.CellHeight = ConvertPixelsToDp(c.Height + c.PaddingBottom + c.PaddingTop);
+                    element.SelectionRepositioning();
+                    firstVisibleItem = currentFirstVisibleItem;
+                }
                 if (firstVisibleItem == -1)
                     firstVisibleItem = view.FirstVisiblePosition;
-                var currentFirstVisibleItem = -1;
                 if (view.CanScrollVertically(-1))
                     element.ShrinkFooter();
                 if (view.CanScrollVertically(1))
@@ -46,24 +56,10 @@ namespace WeatherApp.Droid
                     element.ShrinkFooter();
                     element.ExpandHeader();
                 }
-
                 if (!view.CanScrollVertically(1))
                 {
                     element.ShrinkHeader();
                     element.ExpandFooter();
-                }
-
-                if (scrollState == ScrollState.Idle)
-                {
-                    if (Element != null)
-                    {
-                        var c = Control.GetChildAt(0);
-                        element.FirstVisibleItemTopYOffsetAfterScroll = ConvertPixelsToDp(Math.Abs(c.Top));
-                        element.FirstVisibleItemAfterScroll = Control.FirstVisiblePosition;
-                        element.CellHeight = ConvertPixelsToDp(c.Height + c.PaddingBottom + c.PaddingTop);
-                        element.SelectionRepositioning();
-                    }
-                    firstVisibleItem = currentFirstVisibleItem;
                 }
             }
         }

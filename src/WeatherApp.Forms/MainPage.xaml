@@ -8,7 +8,7 @@
     xmlns:forms="clr-namespace:WeatherApp.Forms;assembly=WeatherApp.Forms"
     BackgroundImage="BackgroundImage.jpg">
 
-    <Grid>
+    <Grid RowSpacing="0" ColumnSpacing="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -23,6 +23,9 @@
             Grid.Column="0"
             HeightRequest="55"
             HorizontalOptions="FillAndExpand"
+            Margin="0"
+            Placeholder="Type city name"
+            PlaceholderColor="WhiteSmoke"
             Text="{Binding SearchQuery, Mode=TwoWay}"
             TextColor="WhiteSmoke"
             VerticalOptions="FillAndExpand" />
@@ -169,6 +172,7 @@
                 VerticalOptions="FillAndExpand" />
             <BoxView
                 Grid.Row="2"
+                x:Name="bottomOfSelection"
                 BackgroundColor="#8BBFD9"
                 IsEnabled="False" />
         </Grid>
