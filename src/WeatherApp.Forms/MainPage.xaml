@@ -84,16 +84,6 @@
                                 Text="{Binding DateTimeText}"
                                 TextColor="White"
                                 VerticalTextAlignment="Center" />
-                            <ffimageloading:CachedImage
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="1"
-                                Aspect="AspectFit"
-                                HeightRequest="32"
-                                HorizontalOptions="Center"
-                                Source="{Binding IconUrl}"
-                                VerticalOptions="Center"
-                                WidthRequest="32" />
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="2"
