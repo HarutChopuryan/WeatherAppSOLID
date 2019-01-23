@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,14 @@ namespace WeatherApp.Core.Services.Implementation
             uriBuilder.Path += path;
             uriBuilder.Query = GetQueryString(parameters);
             HttpResponseMessage result = null;
-            result = await _client.GetAsync(uriBuilder.Uri, token);
+            try
+            {
+                result = _client.GetAsync(uriBuilder.Uri, token).Result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             //if (!result.IsSuccessStatusCode)
             //    throw new Exception($"Http GET request to path {path} failed with status code {result.StatusCode}.");
             var response = await ParseResponse<T>(result);

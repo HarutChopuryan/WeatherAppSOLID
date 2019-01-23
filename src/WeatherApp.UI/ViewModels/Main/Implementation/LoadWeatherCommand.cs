@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using Grace.DependencyInjection.Exceptions;
+using System.Threading;
+using System.Threading.Tasks;
 using WeatherApp.Core.Models;
 using WeatherApp.Core.Services;
 using WeatherApp.UI.ViewModels.Base.Implementation;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace WeatherApp.UI.ViewModels.Main.Implementation
 {
-    internal class LoadWeatherCommand : Command
+    internal class LoadWeatherCommand : AsyncCommand /*Command*/
     {
         private readonly MainViewModel _mainViewModel;
         private readonly IWeatherService _weatherService;
@@ -24,89 +25,81 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
             _mainViewModel.Items = new ObservableCollection<Grouping<ItemsViewModel>>();
         }
 
-        public override async void Execute(object parameter)
+        protected override Task<bool> ExecuteCoreAsync(object parameter, CancellationToken token = default(CancellationToken))
         {
             SetToNullItemsContent();
-            _mainViewModel.ErrorVisibility = false;
-            _mainViewModel.ActivityIndicatorVisibility = true;
-            var cityName = (string) parameter;
+            var cityName = (string)parameter;
             if (string.IsNullOrWhiteSpace(cityName))
             {
-                _mainViewModel.FrameVisibility = false;
-                _mainViewModel.ErrorVisibility = true;
                 SetToNullItemsContent();
-                _mainViewModel.ErrorMessage = "Type city name";
-                _mainViewModel.ActivityIndicatorVisibility = false;
-                return;
+                FailureMessage = "Type city name";
+                return
+                    Task.FromResult(false);
             }
 
             cityName = cityName.ToLower();
             cityName = MakeUpperFirstLetter(cityName);
-            try
+            var currentState = Connectivity.NetworkAccess;
+            if (currentState == NetworkAccess.Internet)
             {
-                var currentState = Connectivity.NetworkAccess;
-                if (currentState == NetworkAccess.Internet)
+                _mainViewModel.Weather = _weatherService.GetWeatherAsync(cityName).Result;
+
+                _mainViewModel.Items = _mainViewModel.Weather.ListItems
+                    .GroupBy(item => DateTime.Parse(item.DateTimeText).ToString("yyyy-MM-dd"))
+                    .Select(grouping => new Grouping<ItemsViewModel>(grouping.Key, grouping.Select(MapListItemToItemsViewModel)))
+                    .ToList();
+
+                _mainViewModel.FlattenedItems = new List<object>();
+                foreach (var group in _mainViewModel.Items)
                 {
-                    _mainViewModel.Weather = await _weatherService.GetWeatherAsync(cityName);
-
-
-                    _mainViewModel.Items = _mainViewModel.Weather.ListItems
-                        .GroupBy(item => DateTime.Parse(item.DateTimeText).ToString("yyyy-MM-dd"))
-                        .Select(grouping => new Grouping<ItemsViewModel>(grouping.Key, grouping.Select(MapListItemToItemsViewModel)))
-                        .ToList();
-
-                    _mainViewModel.FrameVisibility = true;
-
-                    _mainViewModel.FlattenedItems = new List<object>();
-                    foreach (var group in _mainViewModel.Items)
+                    _mainViewModel.FlattenedItems.Add(group);
+                    foreach (var itemsViewModel in group)
                     {
-                        _mainViewModel.FlattenedItems.Add(group);
-                        foreach (var itemsViewModel in group)
-                        {
-                            _mainViewModel.FlattenedItems.Add(itemsViewModel);
-                        }
+                        _mainViewModel.FlattenedItems.Add(itemsViewModel);
                     }
                 }
-                else
-                {
-                    _mainViewModel.FrameVisibility = false;
-                    _mainViewModel.ActivityIndicatorVisibility = true;
-                    _mainViewModel.ErrorVisibility = true;
-                    SetToNullItemsContent();
-                    _mainViewModel.ErrorMessage = "No internet access";
-                    _mainViewModel.ActivityIndicatorVisibility = false;
-                }
+                
+                return
+                    Task.FromResult(true);
             }
-            catch (HttpRequestException)
+            else
             {
-                _mainViewModel.FrameVisibility = false;
-                _mainViewModel.ActivityIndicatorVisibility = true;
-                _mainViewModel.ErrorVisibility = true;
                 SetToNullItemsContent();
-                _mainViewModel.ErrorMessage = "No internet access";
-            }
-            catch (NullReferenceException)
-            {
-                _mainViewModel.FrameVisibility = false;
-                _mainViewModel.ActivityIndicatorVisibility = true;
-                _mainViewModel.ErrorVisibility = true;
-                SetToNullItemsContent();
-                _mainViewModel.ErrorMessage = "City not found";
-            }
-            catch (Exception)
-            {
-                _mainViewModel.FrameVisibility = false;
-                _mainViewModel.ActivityIndicatorVisibility = true;
-                _mainViewModel.ErrorVisibility = true;
-                SetToNullItemsContent();
-                _mainViewModel.ErrorMessage = "City not found";
-            }
-            finally
-            {
-                _mainViewModel.ActivityIndicatorVisibility = false;
+                IsBusy = false;
+                IsSuccessful = false;
+                FailureMessage = "No internet access";
+                return
+                    Task.FromResult(false);
             }
         }
 
+        protected override void HandleException(Exception exception)
+        {
+            if (exception is HttpRequestException)
+            {
+                SetToNullItemsContent();
+                IsBusy = false;
+                IsSuccessful = false;
+                FailureMessage = "No internet access";
+                return;
+            }
+            else if (exception is NullReferenceException)
+            {
+                SetToNullItemsContent();
+                IsBusy = false;
+                IsSuccessful = false;
+                FailureMessage = "City not found";
+                return;
+            }
+            else
+            {
+                SetToNullItemsContent();
+                IsBusy = false;
+                IsSuccessful = false;
+                FailureMessage = "City not found";
+                return;
+            }
+        }
 
         private string MakeUpperFirstLetter(string s)
         {
@@ -125,10 +118,10 @@ namespace WeatherApp.UI.ViewModels.Main.Implementation
         {
             return new ItemsViewModel
             {
-                DateTimeText = listItem.DateTimeText.Substring(10,6),
-                Temp = $"{listItem.MainItems.Temp-273.15:0.0} \u00B0C",
+                DateTimeText = listItem.DateTimeText.Substring(10, 6),
+                Temp = $"{listItem.MainItems.Temp - 273.15:0.0} \u00B0C",
                 Description = listItem.WeatherItems[0].Description,
-                IconUrl = listItem.WeatherItems[0].Description.Replace(" ","_") + ".png",
+                IconUrl = listItem.WeatherItems[0].Description.Replace(" ", "_") + ".png",
                 WindSpeed = $"{listItem.Wind.Speed:0.0} m/s"
             };
         }

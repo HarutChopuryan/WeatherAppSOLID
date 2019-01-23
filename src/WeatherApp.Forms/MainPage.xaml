@@ -8,7 +8,13 @@
     xmlns:forms="clr-namespace:WeatherApp.Forms;assembly=WeatherApp.Forms"
     BackgroundImage="BackgroundImage.jpg">
 
-    <Grid RowSpacing="0" ColumnSpacing="0">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <forms:IntToBoolConverter x:Key="intToBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnSpacing="0" RowSpacing="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -21,9 +27,9 @@
             x:Name="_entry"
             Grid.Row="0"
             Grid.Column="0"
+            Margin="0"
             HeightRequest="55"
             HorizontalOptions="FillAndExpand"
-            Margin="0"
             Placeholder="Type city name"
             PlaceholderColor="WhiteSmoke"
             Text="{Binding SearchQuery, Mode=TwoWay}"
@@ -142,8 +148,8 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalOptions="Center"
-            IsRunning="{Binding ActivityIndicatorVisibility}"
-            IsVisible="{Binding ActivityIndicatorVisibility}"
+            IsRunning="{Binding LoadCommand.IsBusy}"
+            IsVisible="{Binding LoadCommand.IsBusy}"
             VerticalOptions="Center"
             Color="DarkGray" />
         <Grid
@@ -152,7 +158,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             IsEnabled="False"
-            IsVisible="{Binding FrameVisibility}"
+            IsVisible="{Binding LoadCommand.IsSuccessful}"
             RowSpacing="0"
             VerticalOptions="Center">
             <Grid.RowDefinitions>
@@ -171,18 +177,19 @@
                 Opacity="0.25"
                 VerticalOptions="FillAndExpand" />
             <BoxView
-                Grid.Row="2"
                 x:Name="bottomOfSelection"
+                Grid.Row="2"
                 BackgroundColor="#8BBFD9"
                 IsEnabled="False" />
         </Grid>
         <Label
+            x:Name="errorLabel"
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalTextAlignment="Center"
-            IsVisible="{Binding ErrorVisibility}"
-            Text="{Binding ErrorMessage}"
+            IsVisible="{Binding Path=LoadCommand.FailureMessage.Length, Converter={StaticResource intToBool}}"
+            Text="{Binding LoadCommand.FailureMessage}"
             VerticalTextAlignment="Center" />
     </Grid>
 </ContentPage>
